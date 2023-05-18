@@ -6,7 +6,9 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
   //* future type이 있기 때문에 const 가 올 수 없다.
 
-  final Future<List<MovieModel>> movies = ApiService.getComingSoon();
+  final Future<List<MovieModel>> comingSoonMovies = ApiService.getComingSoon();
+  final Future<List<MovieModel>> nowPlayingMovies = ApiService.getNowPlaying();
+  final Future<List<MovieModel>> popularMovies = ApiService.getPopular();
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,25 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(
+                height: 20,
+              ),
+              FutureBuilder(
+                future: popularMovies,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
+                      children: [
+                        SizedBox(
+                          height: 300,
+                          child: makeList(snapshot),
+                        )
+                      ],
+                    );
+                  }
+                  return const CircularProgressIndicator.adaptive();
+                },
+              ),
               const Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 20,
@@ -48,7 +69,7 @@ class HomeScreen extends StatelessWidget {
                 height: 20,
               ),
               FutureBuilder(
-                future: movies,
+                future: comingSoonMovies,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Column(
