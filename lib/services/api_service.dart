@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cinemas/models/movie_detail_model.dart';
 import 'package:cinemas/models/movie_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -8,6 +9,7 @@ class ApiService {
   static const String comingSoon = 'coming-soon';
   static const String popular = 'popular';
   static const String nowPlaying = 'now-playing';
+  static const String detail = 'movie?id=';
 
   static Future<List<MovieModel>> getComingSoon() async {
     final List<MovieModel> movieInstances = [];
@@ -50,6 +52,15 @@ class ApiService {
         movieInstances.add(MovieModel.fromJson(movie));
       }
       return movieInstances;
+    }
+    throw Error();
+  }
+
+  static Future<MovieDetailModel> getDetailById(int id) async {
+    var url = Uri.parse('$baseUrl$detail$id');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      return MovieDetailModel.fromJson(jsonDecode(response.body));
     }
     throw Error();
   }
