@@ -1,6 +1,7 @@
 import 'package:cinemas/models/movie_detail_model.dart';
 import 'package:cinemas/services/api_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class DetailScreen extends StatefulWidget {
   final int id;
@@ -35,9 +36,22 @@ class _DetailScreenState extends State<DetailScreen> {
     return genres.map((genre) => genre['name']).join(', ');
   }
 
-  // Widget _buildRatingBar(double voteAverage) {
-  //   return RaitingBar
-  // }
+  Widget _buildRatingBar(double voteAverage) {
+    return RatingBar.builder(
+        initialRating: voteAverage / 2,
+        minRating: 0,
+        direction: Axis.horizontal,
+        allowHalfRating: true,
+        itemCount: 5,
+        itemSize: 30,
+        itemBuilder: (context, index) {
+          return const Icon(
+            Icons.star,
+            color: Colors.amber,
+          );
+        },
+        onRatingUpdate: (rating) {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +108,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     const SizedBox(
                       height: 10,
                     ),
+                    _buildRatingBar(snapshot.data!.voteAverage),
                     const SizedBox(
                       height: 20,
                     ),
@@ -129,7 +144,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       ],
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                     const Text(
                       'Storyline',
@@ -154,7 +169,6 @@ class _DetailScreenState extends State<DetailScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const Center(),
                     const SizedBox(
                       height: 15,
                     ),
